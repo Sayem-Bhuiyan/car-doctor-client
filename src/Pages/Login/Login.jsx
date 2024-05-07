@@ -42,7 +42,7 @@ const Login = () => {
               </label>
             </div>
             <div className="form-control mt-6">
-              <button className="btn bg-[#FF3811] text-white text-lg font-semibold">Login</button>
+              <input type="submit" value="Login" className="btn bg-[#FF3811] text-white text-lg font-semibold"/>
             </div>
             <div className='text-center mt-5 space-y-5' > 
                 <p className='text-[#444444] text-base'>Or Login in with</p>
