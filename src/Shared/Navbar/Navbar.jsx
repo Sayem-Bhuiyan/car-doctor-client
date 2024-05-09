@@ -9,7 +9,12 @@ const Navbar = () => {
   const navItems = (
     <>
       <li><NavLink to="/">Home</NavLink></li>
-      <li><NavLink to="/">About</NavLink></li>
+      <li><NavLink to="/about">About</NavLink></li>
+      {
+        user?.email && <>
+          <li><NavLink to="/bookings">My Bookings</NavLink></li>
+        </>
+      }
     </>
   );
 
