@@ -2,8 +2,40 @@ import { FaFacebook, FaLinkedin } from 'react-icons/fa';
 import img from '../../assets/images/login/login.svg'
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../Provider/AuthProvider';
+import { updateProfile } from 'firebase/auth';
 
 const Signup = () => {
+
+  const {createUser} = useContext(AuthContext);
+
+  const handleSignup = event => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    
+    createUser(email, password)
+    .then(userCredential => {
+      const user = userCredential.user;
+      console.log(user);
+      updateProfile(user, {
+        displayName: name
+      })
+      .then(() => {
+        console.log('profile updated');
+      })
+      .catch( (error) => {
+        console.log(error);
+      })
+      form.reset()
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex flex-col lg:flex-row gap-20 justify-between">
@@ -11,7 +43,7 @@ const Signup = () => {
           <img src={img} alt="" />
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-          <form className="card-body">
+          <form onSubmit={handleSignup} className="card-body">
             <h2 className="text-4xl text-center font-bold">Sign Up</h2>
             <div className="form-control">
               <label className="label">
@@ -43,8 +75,8 @@ const Signup = () => {
               </label>
               <input
                 type="password"
-                placeholder="password"
-                name='Enter Your Password'
+                placeholder="Enter Your Password"
+                name='password'
                 className="input input-bordered"
                 required
               />
