@@ -3,7 +3,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const ServiceCard = ({service}) => {
-    const {title, price, img} = service;
+    const {_id, title, price, img} = service;
   return (
     <div className="card bg-base-100 shadow-xl p-6">
       <figure className="">
@@ -18,7 +18,7 @@ const ServiceCard = ({service}) => {
         
         <div className="flex justify-between items-center">
         <p className='text-[#FF3811] font-semibold text-xl'>Price: ${price}</p>
-          <Link className='text-[#FF3811] font-semibold text-xl' to=""><FaArrowRight /></Link>
+          <Link className='text-[#FF3811] font-semibold text-xl' to={`/checkout/${_id}`}><FaArrowRight /></Link>
         </div>
       </div>
     </div>
