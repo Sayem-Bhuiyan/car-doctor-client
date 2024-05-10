@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const BookingsRow = ({ booking, bookings, setBookings }) => {
-  const { _id, imageURL, date, service, price } = booking;
+  const { _id, imageURL, date, service, price, status } = booking;
 
   const handleDelete = (_id) => {
     const proceed = confirm('Are you sure to delete?');
@@ -21,6 +21,34 @@ const BookingsRow = ({ booking, bookings, setBookings }) => {
       })
     }
   }
+
+
+  const handleBookingConfirm = _id => {
+    const proceed = confirm('Are you sure to update this');
+    if(proceed){
+      fetch(`http://localhost:5000/bookings/${_id}`, {
+        method: "PATCH",
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({status: 'confrim'})
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        if(data.modifiedCount > 0){
+          alert('Booking Updated')
+          const remaining = bookings.filter(booking => booking._id !== _id)
+          const updated = bookings.find(booking => booking._id === _id);
+          updated.status = 'confirm';
+          const newBookings = [updated, ...remaining];
+          setBookings(newBookings)
+        }
+      })
+    }
+  }
+
+
   return (
     <tr>
       <th>
@@ -54,7 +82,11 @@ const BookingsRow = ({ booking, bookings, setBookings }) => {
       <td>{date}</td>
       <td>{price}</td>
       <th>
-        <button className="btn btn-ghost btn-xs">details</button>
+        {
+          status === 'confirm' ? <span className="text-primary font-semibold">Confirmed</span>
+          : 
+          <button onClick={() => handleBookingConfirm(_id)} className="btn btn-ghost btn-xs">Confrim</button>
+        }
       </th>
     </tr>
   );
