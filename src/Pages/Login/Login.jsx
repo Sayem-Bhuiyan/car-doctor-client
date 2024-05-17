@@ -1,35 +1,46 @@
-import { FaFacebook, FaLinkedin } from 'react-icons/fa';
-import img from '../../assets/images/login/login.svg'
-import { FcGoogle } from 'react-icons/fc';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../../Provider/AuthProvider';
+import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import img from "../../assets/images/login/login.svg";
+import { FcGoogle } from "react-icons/fc";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
+import axios from "axios";
 
 const Login = () => {
-
-  const {signInUser} = useContext(AuthContext);
+  const { signInUser } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
   console.log(location);
 
-  const handleLogin = e => {
-    e.preventDefault()
+  const handleLogin = (e) => {
+    e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    
-    signInUser(email, password)
-    .then(userCredential => {
-      const user = userCredential.user;
-      console.log(user);
-      form.reset()
-      navigate(location?.state ? location.state : '/')
 
-    })
-    .catch(error => {
-      console.log(error);
-    })
-  }
+    signInUser(email, password)
+      .then((userCredential) => {
+        const loggedInUser = userCredential.user;
+        console.log(loggedInUser);
+        form.reset();
+        const user = { email };
+
+        // get access token
+        axios
+          .post("http://localhost:5000/jwt", user, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.success) {
+              navigate(location?.state ? location.state : "/");
+            }
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -46,7 +57,7 @@ const Login = () => {
               </label>
               <input
                 type="email"
-                name='email'
+                name="email"
                 placeholder="Enter Your Email"
                 className="input input-bordered"
                 required
@@ -59,7 +70,7 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="Enter Your Password"
-                name='password'
+                name="password"
                 className="input input-bordered"
                 required
               />
@@ -70,16 +81,31 @@ const Login = () => {
               </label>
             </div>
             <div className="form-control mt-6">
-              <input type="submit" value="Login" className="btn bg-[#FF3811] text-white text-lg font-semibold"/>
+              <input
+                type="submit"
+                value="Login"
+                className="btn bg-[#FF3811] text-white text-lg font-semibold"
+              />
             </div>
-            <div className='text-center mt-5 space-y-5' > 
-                <p className='text-[#444444] text-base'>Or Login in with</p>
-                <div className='space-x-4 text-lg'>
-                    <button><FaFacebook /></button>
-                    <button><FaLinkedin /></button>
-                    <button><FcGoogle /></button>
-                </div>
-                <p className='text-[#737373] text-base font-semibold'>Do not have any account? <Link to="/signup" className='text-[#FF3811] cursor-pointer'>Sign Up </Link></p>
+            <div className="text-center mt-5 space-y-5">
+              <p className="text-[#444444] text-base">Or Login in with</p>
+              <div className="space-x-4 text-lg">
+                <button>
+                  <FaFacebook />
+                </button>
+                <button>
+                  <FaLinkedin />
+                </button>
+                <button>
+                  <FcGoogle />
+                </button>
+              </div>
+              <p className="text-[#737373] text-base font-semibold">
+                Do not have any account?{" "}
+                <Link to="/signup" className="text-[#FF3811] cursor-pointer">
+                  Sign Up{" "}
+                </Link>
+              </p>
             </div>
           </form>
         </div>
