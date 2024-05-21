@@ -3,6 +3,7 @@ import ServiceCard from "./ServiceCard";
 
 const Services = () => {
   const [services, setServices] = useState([]);
+  const [asc, setAsc] = useState(true);
 
   useEffect(() => {
     fetch("http://localhost:5000/services")
@@ -23,6 +24,11 @@ const Services = () => {
           humour, or randomised words which do not look even slightly
           believable.{" "}
         </p>
+        <button
+        onClick={() => setAsc(!asc)}
+         className="btn btn-secondary">
+          {asc ? "Price: High to Low" : "Price: Low to High "}
+          </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {services.map((service) => (
