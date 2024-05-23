@@ -27,7 +27,7 @@ const Services = () => {
         <button
         onClick={() => setAsc(!asc)}
          className="btn btn-secondary">
-          {asc ? "Price: High to Low" : "Price: Low to High "}
+          {asc ? "Price: High to Low" : "Price: Low to High " }
           </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
